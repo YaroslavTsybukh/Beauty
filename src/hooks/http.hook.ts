@@ -1,6 +1,7 @@
 import {useState , useCallback } from "react";
 
 type HttpMethod = 'GET' | 'POST' | 'DELETE' | 'PATCH'
+export type LoadingStatus = 'idle' | 'loading' | 'error'
 
 interface HttpHeaders {
     [key: string]: string
@@ -14,15 +15,17 @@ interface HttpRequest {
 }
 
 export const useHttp = () => {
-    const [status , setStatus] = useState<string>("idle")
+    const [status , setStatus] = useState<LoadingStatus>("idle")
 
     const request = useCallback(async({
                                           url,
                                           method = 'GET',
                                           body = null,
-                                          headers = {'Content-Type': 'application/json'},
+                                          headers = {'Content-type': 'application/json'},
                                       }: HttpRequest
     ) => {
+        setStatus("loading")
+
         try {
             const response = await fetch(url, {method , body , headers})
 
@@ -32,11 +35,11 @@ export const useHttp = () => {
 
             const data = await response.json()
 
-            setStatus('loading')
+            setStatus('idle')
             return data
 
         } catch(e) {
-            setStatus('idle')
+            setStatus('error')
 
             if(e instanceof Error) {
                 return e.message
