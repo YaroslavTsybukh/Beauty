@@ -2,6 +2,9 @@ import {useHttp} from "../hooks/http.hook";
 import {hasRequiredFields} from "../utils/hasRequiredFields";
 import {IAppointment , ActiveAppointment} from "../shared/appointment.interface";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat"
+
+dayjs.extend(customParseFormat)
 
 const requiredFields = ["id", "date", "name", "service", "phone", "canceled"];
 
@@ -49,7 +52,19 @@ const useAppointmentService = () => {
         return res
     }
 
-    return {getAllAppointments , getAllActiveAppointments , changedCanceledProperty , status}
+    const createAppointment = async(body: IAppointment) => {
+        const id = new Date().getTime()
+
+        body.id = id
+        body.date = dayjs(body.date , "DD/MM/YYYY HH:mm").format("YYYY-MM-DDTHH:mm")
+        return await request({
+            url: _apiBase,
+            method: 'POST',
+            body: JSON.stringify(body),
+        })
+    }
+
+    return {getAllAppointments , getAllActiveAppointments , changedCanceledProperty , createAppointment , status}
 }
 
 export default useAppointmentService
