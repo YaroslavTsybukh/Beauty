@@ -78,7 +78,7 @@
       "name": "Yaroslav Tsybukh",
       "service": "asd",
       "phone": "+1 890 335 372",
-      "canceled": false
+      "canceled": true
     }
   ]
 }
