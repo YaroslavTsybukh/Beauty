@@ -21,18 +21,18 @@
 		height: 60px;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 	}
-	&__link {
+	&__li {
 		font-weight: 700;
 		font-size: 20px;
 		line-height: 27px;
 		color: rgba(0, 0, 0, 0.5);
-		&_active {
-			color: $main-color;
-		}
-		a {
+		.header__link {
 			display: block;
 			width: 100%;
 			padding: 0 20px;
+			&_active {
+				color: $main-color;
+			}
 			&:hover {
 				color: $main-color;
 			}
