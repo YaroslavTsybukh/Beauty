@@ -1,7 +1,6 @@
 import {IAppointment} from "../../shared/appointment.interface";
 import {useState , useEffect , memo} from "react";
 import dayjs from 'dayjs';
-import {useLocation} from "react-router-dom";
 import {Optional} from "utility-types";
 
 import "./appointmentItem.scss";
@@ -13,7 +12,6 @@ type Appointment = Optional<IAppointment , "canceled"> & {
 
 const AppointmentItem = memo (({id , name , service , phone , date , canceled , handleOpen , getActiveAppointments}: Appointment) => {
 	const [timeLeft , changeTimeLeft] = useState<string | null>(null)
-	const {pathname} = useLocation()
 	const formattedDate = dayjs(date).format("DD/MM/YYYY HH:mm")
 
 	useEffect(() => {

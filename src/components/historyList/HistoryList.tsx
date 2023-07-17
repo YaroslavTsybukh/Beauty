@@ -3,9 +3,12 @@ import {AppointmentsContext} from "../../context/appointments/AppointmentsContex
 import AppointmentItem from "../appointmentItem.tsx/AppointmentItem";
 import Spinner from "../spinner/Spinner";
 import Error from "../error/Error";
+import dayjs from "dayjs";
 
 function HistoryList() {
 	const {allAppointments , getAppointments , loadingStatus} = useContext(AppointmentsContext)
+
+	allAppointments.sort((a ,b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
 
 	useEffect(() => {
 		getAppointments()

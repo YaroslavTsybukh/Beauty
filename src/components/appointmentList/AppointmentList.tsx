@@ -25,7 +25,16 @@ function AppointmentList() {
 	} else if (loadingStatus == "error") {
 		return (
 			<>
-				<Error />
+				<Error msg="error"
+					   version="1.1"
+					   viewBox="0 0 499.973 391.157"
+					   xmlns="http://www.w3.org/2000/svg"
+					   style={{
+						   width: "100px",
+						   height: "100px",
+						   display: "block",
+						   margin: "0 auto",
+					   }}/>
 				<button className="schedule__reload" onClick={getActiveAppointments}>
 					Try again
 				</button>
