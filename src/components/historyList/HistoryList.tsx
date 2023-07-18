@@ -6,13 +6,13 @@ import Error from "../error/Error";
 import dayjs from "dayjs";
 
 function HistoryList() {
-	const {allAppointments , getAppointments , loadingStatus} = useContext(AppointmentsContext)
+	const {calendarDate , allAppointments , getAppointments , loadingStatus} = useContext(AppointmentsContext)
 
 	allAppointments.sort((a ,b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf())
 
 	useEffect(() => {
 		getAppointments()
-	}, [])
+	}, [calendarDate])
 
 	if(loadingStatus == "loading") {
 		return <Spinner />
@@ -30,10 +30,10 @@ function HistoryList() {
 
 	return (
 		<>
-			{
+			{ 	allAppointments.length > 0 ?
 				allAppointments.map(appointment => (
 					<AppointmentItem key={appointment.id} {...appointment} />
-				))
+				)) : <h2>Нет записей на эту дату...</h2>
 			}
 		</>
 	);

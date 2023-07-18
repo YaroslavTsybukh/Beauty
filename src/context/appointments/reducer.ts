@@ -1,11 +1,13 @@
 import {ActiveAppointment, IAppointment} from "../../shared/appointment.interface";
 import {ActionsTypes, AppointmentAction} from "./actions";
 import {LoadingStatus} from "../../hooks/http.hook";
+import {LooseValue} from "react-calendar/dist/cjs/shared/types";
 
 export interface IState {
     allAppointments: IAppointment[] | [],
     activeAppointments: ActiveAppointment[] | [],
-    loadingStatus: LoadingStatus
+    loadingStatus: LoadingStatus ,
+    calendarDate: LooseValue
 }
 
 const reducer = (state: IState , action:AppointmentAction): IState => {
@@ -29,6 +31,12 @@ const reducer = (state: IState , action:AppointmentAction): IState => {
             return {
                 ...state,
                 loadingStatus: 'error'
+            }
+        }
+        case ActionsTypes.CHANGED_CALENDAR_DATE: {
+            return {
+                ...state,
+                calendarDate: action.payload
             }
         }
         default:

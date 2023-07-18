@@ -1,7 +1,10 @@
-import React , {createContext, useEffect, useReducer} from "react";
-import reducer , {IState} from "./reducer";
-import {ActionsTypes} from "./actions";
+import React , { createContext, useEffect, useReducer } from "react";
+import reducer , { IState } from "./reducer";
+import { ActionsTypes } from "./actions";
 import useAppointmentService from "../../services/AppointmentService";
+import { Value } from "react-calendar/dist/cjs/shared/types";
+import { filteredData } from "../../utils/filteredData";
+import {ActiveAppointment, IAppointment} from "../../shared/appointment.interface";
 
 interface IContextProps {
     children: React.ReactNode
@@ -10,20 +13,24 @@ interface IContextProps {
 const initialState: IState = {
     allAppointments: [],
     activeAppointments: [],
-    loadingStatus: 'idle'
+    loadingStatus: 'idle',
+    calendarDate: [null , null]
 }
 
 interface IAppointmentsContext extends IState {
     getAppointments: () => void
     getActiveAppointments: () => void
+    changedCalendarDates: (newDate: Value) => void
 }
 
 export const AppointmentsContext = createContext<IAppointmentsContext>({
     allAppointments: initialState.allAppointments,
     activeAppointments: initialState.activeAppointments,
     loadingStatus: initialState.loadingStatus,
+    calendarDate: initialState.calendarDate,
     getAppointments: () => {},
-    getActiveAppointments: () => {}
+    getActiveAppointments: () => {},
+    changedCalendarDates: (newDate: Value) => {}
 })
 
 const AppointmentsContextProvider = ({children}: IContextProps) => {
@@ -34,11 +41,23 @@ const AppointmentsContextProvider = ({children}: IContextProps) => {
         allAppointments: state.allAppointments,
         activeAppointments: state.activeAppointments,
         loadingStatus: status,
+        calendarDate: state.calendarDate,
         getAppointments: () => {
-            getAllAppointments().then(data => dispatch({type: ActionsTypes.SET_ALL_APPOINTMENTS , payload: data }))
+            getAllAppointments().then(data => {
+                const filteredDataArr = filteredData<IAppointment>(data , state)
+
+                dispatch({type: ActionsTypes.SET_ALL_APPOINTMENTS, payload: filteredDataArr})
+            })
         },
         getActiveAppointments: () => {
-            getAllActiveAppointments().then(data => dispatch({type: ActionsTypes.SET_ACTIVE_APPOINTMENTS , payload: data}))
+            getAllActiveAppointments().then(data => {
+                const filteredDataArr = filteredData<ActiveAppointment>(data , state)
+
+                dispatch({type: ActionsTypes.SET_ACTIVE_APPOINTMENTS , payload: filteredDataArr})
+            })
+        },
+        changedCalendarDates: (newDate: Value) => {
+            dispatch({type: ActionsTypes.CHANGED_CALENDAR_DATE , payload: newDate})
         }
     }
 

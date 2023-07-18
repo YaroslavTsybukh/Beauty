@@ -8,12 +8,12 @@ import CancelModal from "../modal/CancelModal";
 
 function AppointmentList() {
 	const [isOpen , setOpen] = useState<boolean>(false)
-	const {activeAppointments , getActiveAppointments , loadingStatus} = useContext(AppointmentsContext)
+	const {calendarDate , activeAppointments , getActiveAppointments , loadingStatus} = useContext(AppointmentsContext)
 	const [selectedId , selectId] = useState<number>(0)
 
 	useEffect(() => {
 		getActiveAppointments()
-	}, [])
+	}, [calendarDate])
 
 	const openModal = useCallback((id: number) => {
 		setOpen(true)
@@ -44,10 +44,10 @@ function AppointmentList() {
 
 	return (
 		<>
-			{
+			{ activeAppointments.length > 0 ?
 				activeAppointments.map(obj => (
 					<AppointmentItem key={obj.id} {...obj} handleOpen={openModal} getActiveAppointments={getActiveAppointments}/>
-				))
+				)) : <h2>Нет записей на эту дату...</h2>
 			}
 			<CancelModal open={isOpen} handleClose={setOpen} selectedId={selectedId}/>
 		</>
